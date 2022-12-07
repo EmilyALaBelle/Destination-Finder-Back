@@ -1,7 +1,7 @@
 import functions from 'firebase-functions'
 import express from 'express'
 import cors from 'cors'
-import { createNewDestination, getAllDestinations, updateDestination, postSpecificDestination, likeDestination } from './src/destination.js'
+import { createNewDestination, getAllDestinations, updateDestination, postSpecificDestination, likeDestination, findLiked } from './src/destination.js'
 import { addNewUser, userLogin, updateUser } from './src/user.js'
 
 const app = express()
@@ -17,5 +17,6 @@ app.post('/login', userLogin)
 app.post('/signup', addNewUser)
 app.patch('/update/:userId', updateUser)
 app.patch('/like/:destinationId', likeDestination)
+app.get('/like', findLiked)
 
 export const api = functions.https.onRequest(app)
