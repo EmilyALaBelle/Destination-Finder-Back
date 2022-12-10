@@ -39,7 +39,7 @@ export async function updateDestination(req, res) {
 
 
 export async function postSpecificDestination(req, res) {
-  const filter = req.body 
+  const filter = req.body
   try {
     const someDestination = await destinationList.find(filter).toArray()
     res.status(200).json(someDestination)
@@ -49,25 +49,31 @@ export async function postSpecificDestination(req, res) {
   }
 }
 
+export async function likeDestination(req, res) {
+  const { destinationId } = req.params
+  try {
+    const makeLiked = await destinationList.findOneAndUpdate({ _id: new ObjectId(destinationId) }, { $set: { "liked": true } })
+    getAllDestinations(req, res)
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: err })
+  }
 
-//In progress
+}
 
-// export async function likeDestination(req, res) {
-//   const {destinationId} = req.params
-//   const filter = {}
-//   try {
-//     const makeLiked = await destinationList.findOneAndUpdate({ _id: new ObjectId(destinationId) }, { $set: {"liked": true} })
-//     const isLiked = await destinationList.find(filter).toArray()
-//     res.status(200).json(isLiked)
-//     res.status(200).json(makeLiked)
-//   } catch { (err) 
-//     console.error(err)
-//     res.status(500).json({ error: err })
-//   }
-// }
+export async function unlikeDestination(req, res) {
+  const { destinationId } = req.params
+  try {
+    const makeUnliked = await destinationList.findOneAndUpdate({ _id: new ObjectId(destinationId) }, { $set: { "liked": false } })
+    findLiked(req, res)
+  } catch (err) {
+    console.error(err)
+    res.status(200).json({ error: err })
+  }
+}
 
 export async function findLiked(req, res) {
-  const filter = {"liked": true }
+  const filter = { "liked": true }
   try {
     const isLiked = await destinationList.find(filter).toArray()
     res.status(200).json(isLiked)

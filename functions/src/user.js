@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import mongoSecrets from './mongoSecrets.js'
 import { MongoClient, ObjectId } from "mongodb"
 const client = new MongoClient(mongoSecrets)
-import {secretKey} from '../secrets.js'
+import { secretKey } from '../secrets.js'
 const db = client.db("Users")
 const userList = db.collection("userList")
 
@@ -13,8 +13,8 @@ export async function userLogin(req, res) {
     // .find('password', '==', password)
     .findOne({
       $and: [
-        {email: email.toLowerCase()},
-        {password: password}
+        { email: email.toLowerCase() },
+        { password: password }
       ]
     })
   // const users = matchingUsers.docs.map(doc => ({ ...doc.data(), ObjectId: doc.id }))
@@ -29,9 +29,9 @@ export async function userLogin(req, res) {
 
 export async function addNewUser(req, res) {
   const { email, password } = req.body
-  try{
-  await userList.insertOne({ email: email.toLowerCase(), password })
-  await userLogin(req, res)
+  try {
+    await userList.insertOne({ email: email.toLowerCase(), password })
+    await userLogin(req, res)
   }
   catch (err) {
     console.error(err)
@@ -42,11 +42,11 @@ export async function addNewUser(req, res) {
 export async function updateUser(req, res) {
   const { userId } = req.params
   try {
-    await userList.findOneAndUpdate({_id: new ObjectId(userId) }, {$set: req.body})
+    await userList.findOneAndUpdate({ _id: new ObjectId(userId) }, { $set: req.body })
     res.status(200).json(updateUser)
   } catch (err) {
     console.error(err)
-    res.status(500).json({error: err})
+    res.status(500).json({ error: err })
   }
 }
 
